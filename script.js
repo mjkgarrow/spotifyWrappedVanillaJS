@@ -2,6 +2,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 const clientId = "e68b332488db43fb8639650151541950"
 const homepageUri = "https://wrapmenow-vanilla.netlify.app/"
+// const homepageUri = "http://127.0.0.1:5500/"
 const scope = "user-top-read"
 const colours = [
   "#ff99c8",
@@ -58,6 +59,8 @@ const chartInfo = {
 let playingTrackId = ""
 
 let currentTimePeriod = ""
+
+let chartDrawers = []
 
 /**
  * Initiates the Spotify login process.
@@ -125,7 +128,12 @@ async function handlePageLoadOrRedirect() {
  * Builds the site after successful authorization.
  */
 function buildSite(data) {
+  chartDrawers = []
   document.querySelector("main").classList.remove("hidden")
+
+  window.scrollTo(0, 0, {
+    behavior: "instant",
+  })
 
   ScrollTrigger.getAll().forEach((trigger) => trigger.kill(true))
 
@@ -149,7 +157,8 @@ function buildSite(data) {
     deleteSections()
   }
 
-  buildTopArtistsSectopn(data)
+  // buildTopArtistsSection(data)
+  buildTopArtistsSection2(data)
   buildTopTracksSection(data)
   buildListeningSection(data)
   buildRecommendationSection(data)
@@ -178,7 +187,7 @@ function deleteSections() {
   }
 }
 
-function buildTopArtistsSectopn(data) {
+function buildTopArtistsSection(data) {
   let oldSection = document.querySelector(".artists_section")
 
   oldSection && oldSection.remove()
@@ -268,6 +277,82 @@ function buildTopArtistsSectopn(data) {
     panel.appendChild(nameContainer)
     artist_panels_wrapper.appendChild(panel)
   })
+}
+
+function buildTopArtistsSection2(data) {
+  let oldSection = document.querySelector(".artists_section")
+
+  oldSection && oldSection.remove()
+
+  const parentContainer = Object.assign(document.createElement("section"), {
+    className: "artists_section",
+  })
+
+  document.querySelector("main").appendChild(parentContainer)
+
+  const artists = data.artists.slice(0, 5)
+
+  parentContainer.style.height = `${artists.length * 100}lvh`
+
+  const cubeWrapper = Object.assign(document.createElement("div"), {
+    className: "container",
+  })
+
+  const artistTextContainer = Object.assign(document.createElement("div"), {
+    className: "artists_text_wrapper",
+  })
+
+  parentContainer.appendChild(artistTextContainer)
+  parentContainer.appendChild(cubeWrapper)
+
+  let imageHTMLStrings = []
+
+  // Iterate through the artists array to create and append elements
+  artists.forEach((artist, index) => {
+    imageHTMLStrings.push(
+      `<img src="${
+        artist.images[artist.images.length - 1].url
+      }" class="artist_cube_img artist_img_${index}"/>`
+    )
+
+    const panel = Object.assign(document.createElement("div"), {
+      className: `artist_info${index < 1 ? " show" : ""}`,
+    })
+
+    const indexParagraph = Object.assign(document.createElement("p"), {
+      className: "artist_rank",
+      textContent: `#${index + 1}`,
+    })
+
+    const nameContainer = Object.assign(document.createElement("div"), {
+      className: "artist_name",
+    })
+
+    const nameParagraph = Object.assign(document.createElement("p"), {
+      textContent: artist.name,
+    })
+
+    // Append elements
+    panel.appendChild(indexParagraph)
+    nameContainer.appendChild(nameParagraph)
+    panel.appendChild(nameContainer)
+    artistTextContainer.appendChild(panel)
+  })
+
+  let strings = imageHTMLStrings.join("")
+
+  cubeWrapper.innerHTML = `    
+  <div class="visual">
+    <div class="cube">
+      <div class="front side"><div></div>${strings}</div>
+      <div class="back side"><div></div>${strings}</div>
+      <div class="right side"><div></div>${strings}</div>
+      <div class="left side"><div></div>${strings}</div>
+      <div class="top side"><div></div>${strings}</div>
+      <div class="bottom side"><div></div>${strings}</div>
+    </div>
+  </div>
+`
 }
 
 function buildTopTracksSection(data) {
@@ -806,16 +891,28 @@ function createChart(tracksData, searchProperty, colourIndex) {
     }
   }
 
+  chartDrawers.push(drawChart)
+
   drawChart()
 
-  // let resizeTimer
+  let resizeTimeout
+  let initialWidth = window.innerWidth
 
-  // window.addEventListener("resize", function () {
-  //   clearTimeout(resizeTimer)
-  //   resizeTimer = setTimeout(function () {
-  //     drawChart() // Redraw chart with new dimensions
-  //   }, 10)
-  // })
+  window.addEventListener("resize", function () {
+    let newWidth = window.innerWidth
+    clearTimeout(resizeTimeout)
+    if (Math.abs(newWidth - initialWidth) > 2) {
+      resizeTimeout = setTimeout(function () {
+        let d = getLocalStorageWithTimestamp("spotifyData")[currentTimePeriod]
+
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill(true))
+
+        buildTriggers(d)
+
+        drawChart() // Redraw chart with new dimensions
+      }, 10)
+    }
+  })
 }
 
 function createPlayBtnAndAudio(trackId, trackPreviewURL) {
@@ -884,36 +981,54 @@ function handlePlayClick(event, trackId) {
 
 function buildTriggers(data) {
   let tracks = data.tracks.slice(0, 5)
-
-  buildArtistSectionTriggers()
+  let artists = data.artists.slice(0, 5)
+  buildArtistSectionTriggers(artists.length)
   buildTracksSectionTriggers(tracks.length)
   buildListeningSectionTriggers(data.tracks.length)
   buildRecommendationSectionTriggers()
 }
 
-function buildArtistSectionTriggers() {
-  let sections = gsap.utils.toArray(".artist_panel")
+function buildArtistSectionTriggers(dataLength) {
+  const sides = gsap.utils.toArray(".side")
+  const artistInfoWrappers = gsap.utils.toArray(".artist_info")
 
-  // Side scroll animation
-  let scrollTween = gsap.to(sections, {
-    x: (i) => -window.innerWidth * i,
-    duration: (i) => i,
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".artists_section",
-      start: "top top",
-      scrub: true,
-      end: "bottom bottom",
+  ScrollTrigger.create({
+    trigger: ".artists_section",
+    start: "top top",
+    end: "bottom bottom",
+    scrub: true,
+    onUpdate: (self) => {
+      let currentIndex = Math.floor(
+        gsap.utils.interpolate(0, dataLength, self.progress)
+      )
+
+      gsap.to(".cube", {
+        "--rotateX": self.progress * dataLength * 90 + "deg",
+        "--rotateY": self.progress * dataLength * -180 + "deg",
+      })
+
+      artistInfoWrappers.forEach((info, index) => {
+        if (index === currentIndex) {
+          info.classList.add("show")
+        } else {
+          if (currentIndex !== artistInfoWrappers.length) {
+            info.classList.remove("show")
+          }
+        }
+      })
+
+      sides.forEach((side) => {
+        gsap.utils
+          .toArray(side.querySelectorAll(".artist_cube_img"))
+          .forEach((img, index) => {
+            if (index <= currentIndex) {
+              img.classList.add("show")
+            } else {
+              img.classList.remove("show")
+            }
+          })
+      })
     },
-  })
-
-  // Add a scrolltrigger for the animation to each panel
-  sections.forEach((panel) => {
-    ScrollTrigger.create({
-      trigger: panel,
-      containerAnimation: scrollTween,
-      start: "left left",
-    })
   })
 }
 
@@ -1025,36 +1140,3 @@ function longTerm() {
 
 // Call the handlePageLoadOrRedirect function when the page loads
 window.onload = handlePageLoadOrRedirect
-
-// Define a variable to hold the resize timeout identifier outside the event listener to ensure it's accessible within the listener but not attached to the global window object
-let resizeTimeout
-let initialWidth = window.innerWidth
-
-// Listen for resize events on the window
-window.onresize = function () {
-  let newWidth = window.innerWidth
-
-  // Check if the width has changed significantly (you can adjust the threshold)
-  if (Math.abs(newWidth - initialWidth) > 2) {
-    // Clear any pending resize timeout to debounce the refresh call
-    clearTimeout(resizeTimeout)
-
-    // Set a new timeout to handle the end of the resizing
-    resizeTimeout = setTimeout(function () {
-      // Use requestAnimationFrame for the actual execution of the resize logic
-      requestAnimationFrame(() => {
-        // Retrieve data and current scroll level
-        let d = getLocalStorageWithTimestamp("spotifyData")[currentTimePeriod]
-
-        buildSite(d)
-        window.scrollBy({
-          y: window.scrollY,
-          behavior: "instant",
-        })
-
-        // Update the stored width to the new width for future comparisons
-        initialWidth = newWidth
-      })
-    }, 50) // Adjust the timeout delay as needed
-  }
-}
