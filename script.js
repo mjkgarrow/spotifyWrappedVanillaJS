@@ -1,4 +1,4 @@
-gsap.registerPlugin(ScrollTrigger, MotionPathPlugin)
+gsap.registerPlugin(ScrollTrigger)
 
 const clientId = "e68b332488db43fb8639650151541950"
 const homepageUri = "http://127.0.0.1:5500/"
@@ -1048,7 +1048,6 @@ window.onresize = function () {
         let d = getLocalStorageWithTimestamp("spotifyData")[currentTimePeriod]
 
         buildSite(d)
-        console.log("scroll to last scroll")
         window.scrollBy({
           y: window.scrollY,
           behavior: "instant",
@@ -1060,7 +1059,3 @@ window.onresize = function () {
     }, 50) // Adjust the timeout delay as needed
   }
 }
-
-window.addEventListener("scroll", () => {
-  console.log(window.scrollY, document.body.scrollHeight - window.innerHeight)
-})
