@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,800;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- D3 -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+    <!-- CSS scroll polyfill -->
+    <script src="https://flackr.github.io/scroll-timeline/dist/scroll-timeline.js"></script>
+
+    <title>Wrap Me Now</title>
+  </head>
+
+  <body>
+    <section class="splash_section hidden">
+      <div class="splash_background"></div>
+      <div class="splash_card">
+        <h1 class="splash_title">Get your Spotify Wrap early!</h1>
+
+        <button class="login_btn" onclick="login()">Login</button>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
+          class="arrow bounce rotate"
+        >
+          <path
+            d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+          />
+        </svg>
+      </div>
+    </section>
+
+    <main class="hidden">
+      <nav>
+        <button onclick="logout()" class="logout_btn">Logout</button>
+        <div>
+          <button onclick="shortTerm()" class="time_btn short_term">
+            4 weeks
+          </button>
+          <button onclick="mediumTerm()" class="time_btn medium_term">
+            6 months
+          </button>
+          <button onclick="longTerm()" class="time_btn long_term">
+            1 year
+          </button>
+        </div>
+      </nav>
+      <section class="welcome_section">
+        <div class="welcome_background"></div>
+        <div class="splash_card">
+          <h1 class="splash_title">Scroll to view your wrap</h1>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 384 512"
+            class="arrow bounce"
+          >
+            <path
+              d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+            />
+          </svg>
+        </div>
+      </section>
+    </main>
+
+    <script src="requests.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
