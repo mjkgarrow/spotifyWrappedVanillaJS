@@ -1,8 +1,7 @@
 gsap.registerPlugin(ScrollTrigger)
 
 const clientId = "e68b332488db43fb8639650151541950"
-const homepageUri = "http://127.0.0.1:5500/"
-const redirectUri = "http://127.0.0.1:5500/"
+const homepageUri = "https://wrapmenow-vanilla.netlify.app/"
 const scope = "user-top-read"
 const colours = [
   "#ff99c8",
@@ -67,7 +66,7 @@ function login() {
   // Define the required scopes for authorization
   const scopes = "user-top-read"
   // Redirect the user to the Spotify authorization page
-  window.location = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${encodeURIComponent(
+  window.location = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${homepageUri}&scope=${encodeURIComponent(
     scopes
   )}&response_type=token&show_dialog=false`
 }
