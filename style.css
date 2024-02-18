@@ -3,9 +3,6 @@
   --colour-green-light: rgb(29, 187, 87);
   --colour-red: rgb(165, 71, 71);
   --colour-gray: rgb(158, 195, 218);
-
-  scroll-timeline-name: --myScroller;
-  scroll-timeline-axis: y;
 }
 
 html {
@@ -16,7 +13,6 @@ html {
 body {
   font-family: "Fraunces", serif;
   height: 100%;
-  /* overflow-x: hidden; */
   margin: 0;
   padding: 0;
 }
@@ -510,12 +506,6 @@ p {
   transform: translate(0, -50%);
 }
 
-.track_panel_content {
-  animation: fadeInOut ease-in-out both;
-  animation-timeline: view(block);
-  animation-range: cover 0% exit-crossing 100%;
-}
-
 .index_par {
   font-size: 2rem;
   width: 2ch;
@@ -527,40 +517,6 @@ p {
 
 .track_artist_label {
   font-style: italic;
-}
-
-.track_panel_wrapper:last-of-type .track_panel_content {
-  animation: fadeIn ease-in-out both;
-  animation-timeline: view(block);
-  animation-range: cover 0% exit-crossing 100%;
-}
-
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-  }
-
-  30% {
-    opacity: 1;
-  }
-
-  60% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-
-  30% {
-    opacity: 1;
-  }
 }
 
 .track_image_wrapper {
@@ -872,9 +828,6 @@ circle:hover {
   background-color: #ececec;
   width: max-content;
   border-radius: 5px;
-  animation: fadeInOut linear both;
-  animation-timeline: view(block);
-  animation-range: entry 100% contain 90%;
   max-width: 80vw;
 }
 

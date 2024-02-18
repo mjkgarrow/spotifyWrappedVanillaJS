@@ -1,8 +1,8 @@
 gsap.registerPlugin(ScrollTrigger)
 
 const clientId = "e68b332488db43fb8639650151541950"
-const homepageUri = "https://wrapmenow-vanilla.netlify.app/"
-// const homepageUri = "http://127.0.0.1:5500/"
+// const homepageUri = "https://wrapmenow-vanilla.netlify.app/"
+const homepageUri = "http://127.0.0.1:5500/"
 const scope = "user-top-read"
 const colours = [
   "#ff99c8",
@@ -997,6 +997,7 @@ function buildArtistSectionTriggers(dataLength) {
     start: "top top",
     end: "bottom bottom",
     scrub: true,
+    fastScrollEnd: true,
     onUpdate: (self) => {
       let currentIndex = Math.floor(
         gsap.utils.interpolate(0, dataLength, self.progress)
@@ -1036,6 +1037,7 @@ function buildTracksSectionTriggers(tracksLength) {
   // Scroll trigger for background colour
   const timeline = gsap.timeline({
     scrollTrigger: {
+      fastScrollEnd: true,
       trigger: ".tracks_wrapper",
       start: "top top",
       end: "bottom bottom",
@@ -1050,6 +1052,39 @@ function buildTracksSectionTriggers(tracksLength) {
       })
     }
   })
+
+  gsap.utils.toArray(".track_panel_wrapper").forEach((track, index) => {
+    gsap.set(track, { autoAlpha: 0 })
+    let imgHeight = document.querySelector(".track_image").height
+
+    // First transition: 0 to 1
+    gsap.to(track, {
+      autoAlpha: 1,
+      immediateRender: false,
+      ease: "power1.in",
+      scrollTrigger: {
+        fastScrollEnd: true,
+        trigger: track,
+        start: `top ${index > 0 ? "90%" : "40%"}`,
+        end: `top ${index > 0 ? "center" : "top"}`,
+        scrub: true,
+      },
+    })
+
+    // Next transition: 1 to 0
+    gsap.to(track, {
+      autoAlpha: 0,
+      immediateRender: false,
+      ease: "power1.out",
+      scrollTrigger: {
+        trigger: track,
+        fastScrollEnd: true,
+        start: `bottom-=${imgHeight} center`,
+        end: "bottom 10%",
+        scrub: true,
+      },
+    })
+  })
 }
 
 function buildListeningSectionTriggers(dataLength) {
@@ -1059,6 +1094,7 @@ function buildListeningSectionTriggers(dataLength) {
     let pathLength = path ? path.getTotalLength() : 0
 
     ScrollTrigger.create({
+      fastScrollEnd: true,
       trigger: chartWrapper,
       start: "top top",
       end: "bottom top ",
@@ -1089,6 +1125,7 @@ function buildRecommendationSectionTriggers() {
       rotate: "-45",
       ease: "linear",
       scrollTrigger: {
+        fastScrollEnd: true,
         trigger: ".recommendation_section",
         start: "top bottom",
         end: "bottom top",
@@ -1102,11 +1139,45 @@ function buildRecommendationSectionTriggers() {
     rotate: "360",
     ease: "linear",
     scrollTrigger: {
+      fastScrollEnd: true,
       trigger: ".recommendation_section",
       start: "top bottom",
       end: "bottom top",
       scrub: 1,
     },
+  })
+
+  gsap.utils.toArray(".rec_wrapper").forEach((recomendation, index) => {
+    gsap.set(recomendation, { autoAlpha: 0 })
+    // let imgHeight = document.querySelector(".track_image").height
+
+    // First transition: 0 to 1
+    gsap.to(recomendation, {
+      autoAlpha: 1,
+      immediateRender: false,
+      ease: "power1.inOut",
+      scrollTrigger: {
+        fastScrollEnd: true,
+        trigger: recomendation,
+        start: `center 90%`,
+        end: `center center`,
+        scrub: true,
+      },
+    })
+
+    // Next transition: 1 to 0
+    gsap.to(recomendation, {
+      autoAlpha: 0,
+      immediateRender: false,
+      ease: "power1.inOut",
+      scrollTrigger: {
+        trigger: recomendation,
+        fastScrollEnd: true,
+        start: `center center`,
+        end: "center 10%",
+        scrub: true,
+      },
+    })
   })
 }
 
