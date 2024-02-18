@@ -1,8 +1,8 @@
 gsap.registerPlugin(ScrollTrigger)
 
 const clientId = "e68b332488db43fb8639650151541950"
-// const homepageUri = "https://wrapmenow-vanilla.netlify.app/"
-const homepageUri = "http://127.0.0.1:5500/"
+const homepageUri = "https://wrapmenow-vanilla.netlify.app/"
+// const homepageUri = "http://127.0.0.1:5500/"
 const scope = "user-top-read"
 const colours = [
   "#ff99c8",
