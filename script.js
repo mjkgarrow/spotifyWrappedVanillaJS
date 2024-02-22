@@ -1,8 +1,8 @@
 // gsap.registerPlugin(ScrollTrigger)
 
 const clientId = "e68b332488db43fb8639650151541950"
-const homepageUri = "https://wrapmenow-vanilla.netlify.app/"
-// const homepageUri = "http://127.0.0.1:5500/"
+// const homepageUri = "https://wrapmenow-vanilla.netlify.app/"
+const homepageUri = "http://127.0.0.1:5500/"
 const scope = "user-top-read"
 const colours = [
   "#ff99c8",
@@ -871,8 +871,10 @@ function buildTriggers(data) {
 function buildArtistSectionTriggers(dataLength) {
   let listElements = gsap.utils.toArray(".cards li")
   let images = gsap.utils.toArray(".cards li img")
+  let textsElements = gsap.utils.toArray(".cards li p")
 
   gsap.set(images, { rotateY: -45, scale: 0.8, opacity: 0 })
+  gsap.set(textsElements, { rotateY: -45, scale: 0.8, opacity: 0 })
 
   const TIMELINE = gsap.timeline({
     immediateRender: false,
@@ -894,7 +896,9 @@ function buildArtistSectionTriggers(dataLength) {
     TIMELINE.to(
       text,
       {
+        scale: 1,
         opacity: 1,
+        rotationY: 0,
         duration: 1,
       },
       index < 0 ? 0 : `-=1`
@@ -918,8 +922,10 @@ function buildArtistSectionTriggers(dataLength) {
       .to(
         text,
         {
+          scale: isLastElement ? 1 : 0.8,
           opacity: isLastElement ? 1 : 0,
-          duration: 1,
+          rotationY: isLastElement ? 0 : 45,
+          duration: isLastElement ? 0 : 1,
         },
         `-=1`
       )
