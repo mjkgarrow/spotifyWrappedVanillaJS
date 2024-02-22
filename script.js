@@ -1,4 +1,4 @@
-gsap.registerPlugin(ScrollTrigger)
+// gsap.registerPlugin(ScrollTrigger)
 
 const clientId = "e68b332488db43fb8639650151541950"
 const homepageUri = "https://wrapmenow-vanilla.netlify.app/"
@@ -157,8 +157,7 @@ function buildSite(data) {
     deleteSections()
   }
 
-  // buildTopArtistsSection(data)
-  buildTopArtistsSection2(data)
+  buildTopArtistsSection(data)
   buildTopTracksSection(data)
   buildListeningSection(data)
   buildRecommendationSection(data)
@@ -200,159 +199,40 @@ function buildTopArtistsSection(data) {
 
   const artists = data.artists.slice(0, 5)
 
-  // Set height of container
   parentContainer.style.height = `${artists.length * 100}lvh`
-
-  const artist_slider_wrapper = Object.assign(document.createElement("div"), {
-    className: "artist_slider_wrapper",
-  })
-  parentContainer.appendChild(artist_slider_wrapper)
-
-  const headerContainer = Object.assign(document.createElement("div"), {
-    className: "header_container",
-  })
-  artist_slider_wrapper.appendChild(headerContainer)
-
-  const headerContent = Object.assign(document.createElement("div"), {
-    className: "header_content",
-  })
-  headerContainer.appendChild(headerContent)
-
-  const headerText = Object.assign(document.createElement("div"), {
-    textContent: "Your fave artists",
-  })
-  headerContent.appendChild(headerText)
-
-  const artist_panels_wrapper = Object.assign(document.createElement("div"), {
-    className: "artist_panels_wrapper",
-  })
-  artist_slider_wrapper.appendChild(artist_panels_wrapper)
-
-  // Iterate through the artists array to create and append elements
-  artists.forEach((artist, index) => {
-    const panel = Object.assign(document.createElement("div"), {
-      className: "artist_panel",
-    })
-    panel.style.backgroundColor = colours[4 - (artists.length - 1) + index]
-
-    const indexParagraph = Object.assign(document.createElement("p"), {
-      className: "artist_position",
-      textContent: `#${index + 1}`,
-    })
-
-    const imagesLink = Object.assign(document.createElement("a"), {
-      href: artist.external_urls.spotify,
-      target: "_blank",
-    })
-
-    const imagesContainer = Object.assign(document.createElement("div"), {
-      className: "images_wrapper",
-    })
-
-    const blurredImage = Object.assign(document.createElement("img"), {
-      src: artist.images[1].url,
-      alt: artist.name,
-    })
-
-    const regularImage = Object.assign(document.createElement("img"), {
-      src: artist.images[1].url,
-      alt: artist.name,
-    })
-
-    const nameContainer = Object.assign(document.createElement("div"), {
-      className: "artist_name",
-    })
-
-    const nameParagraph = Object.assign(document.createElement("p"), {
-      textContent: artist.name,
-    })
-
-    // Append elements
-    panel.appendChild(indexParagraph)
-    imagesContainer.appendChild(blurredImage)
-    imagesContainer.appendChild(regularImage)
-    imagesLink.appendChild(imagesContainer)
-    panel.appendChild(imagesLink)
-    nameContainer.appendChild(nameParagraph)
-    panel.appendChild(nameContainer)
-    artist_panels_wrapper.appendChild(panel)
-  })
-}
-
-function buildTopArtistsSection2(data) {
-  let oldSection = document.querySelector(".artists_section")
-
-  oldSection && oldSection.remove()
-
-  const parentContainer = Object.assign(document.createElement("section"), {
-    className: "artists_section",
-  })
-
-  document.querySelector("main").appendChild(parentContainer)
-
-  const artists = data.artists.slice(0, 5)
-
-  parentContainer.style.height = `${artists.length * 100}lvh`
-
-  const cubeWrapper = Object.assign(document.createElement("div"), {
-    className: "container",
-  })
-
-  const artistTextContainer = Object.assign(document.createElement("div"), {
-    className: "artists_text_wrapper",
-  })
-
-  parentContainer.appendChild(artistTextContainer)
-  parentContainer.appendChild(cubeWrapper)
 
   let imageHTMLStrings = []
 
   // Iterate through the artists array to create and append elements
   artists.forEach((artist, index) => {
     imageHTMLStrings.push(
-      `<img src="${
-        artist.images[artist.images.length - 1].url
-      }" class="artist_cube_img artist_img_${index}"/>`
+      `
+      <li>
+        <img src="${artist.images[0].url}" width="600" height="600" alt="" />
+        <p>#${index + 1}</p>
+        <p>${artist.name}</p>
+      </li>
+      `
     )
-
-    const panel = Object.assign(document.createElement("div"), {
-      className: `artist_info${index < 1 ? " show" : ""}`,
-    })
-
-    const indexParagraph = Object.assign(document.createElement("p"), {
-      className: "artist_rank",
-      textContent: `#${index + 1}`,
-    })
-
-    const nameContainer = Object.assign(document.createElement("div"), {
-      className: "artist_name",
-    })
-
-    const nameParagraph = Object.assign(document.createElement("p"), {
-      textContent: artist.name,
-    })
-
-    // Append elements
-    panel.appendChild(indexParagraph)
-    nameContainer.appendChild(nameParagraph)
-    panel.appendChild(nameContainer)
-    artistTextContainer.appendChild(panel)
   })
 
-  let strings = imageHTMLStrings.join("")
+  const sectionTitle = Object.assign(document.createElement("div"), {
+    className: "artists_section_title",
+    innerHTML: "Your fave artists",
+  })
 
-  cubeWrapper.innerHTML = `    
-  <div class="visual">
-    <div class="cube">
-      <div class="front side"><div></div>${strings}</div>
-      <div class="back side"><div></div>${strings}</div>
-      <div class="right side"><div></div>${strings}</div>
-      <div class="left side"><div></div>${strings}</div>
-      <div class="top side"><div></div>${strings}</div>
-      <div class="bottom side"><div></div>${strings}</div>
-    </div>
-  </div>
-`
+  const cards = Object.assign(document.createElement("div"), {
+    className: "cards",
+    innerHTML: imageHTMLStrings.join(""),
+  })
+
+  const scrollerWrapper = Object.assign(document.createElement("div"), {
+    className: "scroller_wrapper",
+  })
+
+  scrollerWrapper.appendChild(sectionTitle)
+  scrollerWrapper.appendChild(cards)
+  parentContainer.appendChild(scrollerWrapper)
 }
 
 function buildTopTracksSection(data) {
@@ -989,47 +869,74 @@ function buildTriggers(data) {
 }
 
 function buildArtistSectionTriggers(dataLength) {
-  const sides = gsap.utils.toArray(".side")
-  const artistInfoWrappers = gsap.utils.toArray(".artist_info")
+  let listElements = gsap.utils.toArray(".cards li")
+  let images = gsap.utils.toArray(".cards li img")
 
-  ScrollTrigger.create({
-    trigger: ".artists_section",
-    start: "top top",
-    end: "bottom bottom",
-    scrub: true,
-    fastScrollEnd: true,
-    onUpdate: (self) => {
-      let currentIndex = Math.floor(
-        gsap.utils.interpolate(0, dataLength, self.progress)
+  gsap.set(images, { rotateY: -45, scale: 0.8, opacity: 0 })
+
+  const TIMELINE = gsap.timeline({
+    immediateRender: false,
+    ease: "linear",
+    scrollTrigger: {
+      trigger: ".artists_section",
+      start: "top top",
+      end: `+=${dataLength * (100 - 100 / dataLength)}%`,
+      scrub: true,
+      fastScrollEnd: true,
+    },
+  })
+
+  listElements.forEach((box, index) => {
+    let img = box.querySelector("img")
+    let text = box.querySelectorAll("p")
+    let isLastElement = index === listElements.length - 1
+
+    TIMELINE.to(
+      text,
+      {
+        opacity: 1,
+        duration: 1,
+      },
+      index < 0 ? 0 : `-=1`
+    )
+      .to(
+        img, // rotate and skew images
+        {
+          scale: 1,
+          opacity: 1,
+          rotationY: 0,
+          duration: 1,
+        },
+        index < 0 ? 0 : `-=1`
+      )
+      .to(img, {
+        scale: isLastElement ? 1 : 0.8,
+        opacity: isLastElement ? 1 : 0,
+        rotationY: isLastElement ? 0 : 45,
+        duration: isLastElement ? 0 : 1,
+      })
+      .to(
+        text,
+        {
+          opacity: isLastElement ? 1 : 0,
+          duration: 1,
+        },
+        `-=1`
       )
 
-      gsap.to(".cube", {
-        "--rotateX": self.progress * dataLength * 90 + "deg",
-        "--rotateY": self.progress * dataLength * -180 + "deg",
-      })
+    TIMELINE.to(
+      listElements, // shift the images over
+      {
+        x: `${-100 * (index + 1)}%`,
+        duration: 1,
+      },
+      index < 0 ? `-=1` : isLastElement ? `-=1` : `-=2`
+    )
 
-      artistInfoWrappers.forEach((info, index) => {
-        if (index === currentIndex) {
-          info.classList.add("show")
-        } else {
-          if (currentIndex !== artistInfoWrappers.length) {
-            info.classList.remove("show")
-          }
-        }
-      })
-
-      sides.forEach((side) => {
-        gsap.utils
-          .toArray(side.querySelectorAll(".artist_cube_img"))
-          .forEach((img, index) => {
-            if (index <= currentIndex) {
-              img.classList.add("show")
-            } else {
-              img.classList.remove("show")
-            }
-          })
-      })
-    },
+    // TIMELINE2.to(text, { opacity: 1, duration: 1, delay: 4 }).to(text, {
+    //   opacity: isLastElement ? 1 : 0,
+    //   duration: 1,
+    // })
   })
 }
 

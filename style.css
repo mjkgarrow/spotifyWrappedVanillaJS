@@ -195,252 +195,92 @@ p {
 .artists_section {
   background-color: #e4c1f9;
   position: relative;
-  --cube-size: clamp(200px, 30vh, 400px);
+  --cover-size: clamp(200px, 30vw, 30vh);
+  /* --cover-size: calc(100vw / 3); */
   display: grid;
   position: relative;
   height: max-content;
 }
 
-.artists_text_wrapper {
-  grid-area: 1/1;
-  z-index: 99;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-}
-
-.artist_info {
-  opacity: 0;
-  color: black;
-  height: 100%;
-  width: 95%;
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-  text-wrap: balance;
-  text-align: center;
-  font-size: 1.8rem;
+.artists_section_title {
   position: absolute;
-  padding-top: var(--cube-size);
-  will-change: opacity;
-  transition: opacity 0.5s ease-in-out;
-}
-
-.container {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  grid-area: 1/1;
-  position: sticky;
-  top: 0;
-}
-
-.visual {
-  position: relative;
-  width: 1px;
-  height: 1px;
-}
-
-.cube {
-  --cube-size: clamp(200px, 30vh, 400px);
-  --rotateY: 0deg;
-  --rotateX: 0deg;
-  --rotate: 0deg;
-  --x: 0px;
-  --y: 0px;
-  --z: 0px;
-  width: 100%;
-  height: 100%;
-  transform: rotateY(var(--rotateY)) rotateX(var(--rotateX))
-    rotateZ(var(--rotate)) translate3d(var(--x), var(--y), var(--z));
-  position: absolute;
-  transform-style: preserve-3d;
-  transform-origin: center;
-  will-change: transform;
-}
-
-.cube > div {
+  top: 6rem;
   left: 50%;
-  top: 50%;
-  margin: 0;
-  width: var(--cube-size);
-  aspect-ratio: 1;
-  display: block;
-  position: absolute;
-  transform-style: preserve-3d;
-}
-
-.cube > div > img {
-  height: 100%;
-  position: absolute;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-}
-
-.cube > div > div {
-  height: 100%;
-  background-color: black;
-  position: absolute;
-}
-
-.cube > div > img:first-of-type {
-  opacity: 1;
-}
-
-.show {
-  opacity: 1 !important;
-}
-
-.cube .front {
-  transform: translate(-50%, -50%) rotateY(0deg)
-    translateZ(calc(var(--cube-size) / 2));
-}
-
-.cube .back {
-  transform: translate(-50%, -50%) rotateX(180deg)
-    translateZ(calc(var(--cube-size) / 2));
-}
-
-.cube .right {
-  transform: translate(-50%, -50%) rotateY(90deg)
-    translateZ(calc(var(--cube-size) / 2));
-}
-
-.cube .left {
-  transform: translate(-50%, -50%) rotateY(-90deg)
-    translateZ(calc(var(--cube-size) / 2));
-}
-
-.front img:nth-child(4) {
-  transform: rotate(180deg);
-}
-
-.back img:nth-child(6) {
-  transform: rotate(0deg);
-}
-
-.back img:nth-child(5) {
-  transform: rotate(180deg);
-}
-
-.top img:nth-child(6) {
-  transform: rotate(180deg);
-}
-.top img:nth-child(2) {
-  transform: rotate(180deg);
-}
-
-.bottom img:nth-child(4) {
-  transform: rotate(180deg);
-}
-.bottom img:nth-child(5) {
-  transform: rotate(180deg);
-}
-
-.left img:nth-child(3) {
-  transform: rotate(180deg);
-}
-
-.right img:nth-child(6) {
-  transform: rotate(0deg);
-}
-.right img:nth-child(2) {
-  transform: rotate(0deg);
-}
-.right img:nth-child(3) {
-  transform: rotate(0deg);
-}
-.right img:nth-child(4) {
-  transform: rotate(180deg);
-}
-.right img:nth-child(5) {
-  transform: rotate(0deg);
-}
-
-.cube .top {
-  transform: translate(-50%, -50%) rotateX(90deg)
-    translateZ(calc(var(--cube-size) / 2));
-}
-
-.cube .bottom {
-  transform: translate(-50%, -50%) rotateX(-90deg)
-    translateZ(calc(var(--cube-size) / 2));
-}
-
-.artist_slider_wrapper {
-  position: sticky;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  display: flex;
-}
-
-.header_container {
-  position: absolute;
-  z-index: 99;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 6rem;
-}
-
-.header_content {
+  transform: translateX(-50%);
   font-size: 1.5rem;
   padding: 0.5rem 0.7rem;
   background-color: white;
   border-radius: 1rem;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   text-align: center;
+  margin-inline: auto;
 }
 
-.artist_panels_wrapper {
-  display: flex;
-  position: relative;
-}
-
-.artist_panel {
-  display: flex;
-  align-items: center;
-  width: 100vw;
+.scroller_wrapper {
+  position: sticky;
+  top: 0;
+  margin: 0 auto;
   height: 100vh;
-  justify-content: center;
-  flex-direction: column;
-  color: black;
-  font-size: 2rem;
-  gap: 1rem;
-  will-change: transform;
+  width: 100vw;
+  overflow: hidden;
+}
+.cards * {
+  border: 1px solid red;
 }
 
-.artist_position {
-  font-size: 2.5rem;
+.cards {
+  box-sizing: border-box;
+  white-space: nowrap;
+  width: 100vw;
+  padding-bottom: calc(30vh - (var(--cover-size) / 2));
+  height: 100vh;
 }
 
-.artist_name {
-  text-wrap: balance;
-  text-align: center;
-}
-
-.artist_panel a img {
-  transition: all;
-  transition-duration: 0.2s;
-}
-
-.images_wrapper {
-  height: clamp(200px, 30vh, 400px);
-  aspect-ratio: 1;
+.cards > li {
+  perspective: 40em;
   position: relative;
+  z-index: 1;
+  top: 50%;
+  user-select: none;
+  display: inline-block;
+  width: var(--cover-size);
+  height: var(--cover-size);
 }
 
-.images_wrapper > img {
-  position: absolute;
-  height: 100%;
+.cards > li:first-of-type {
+  margin-left: calc(
+    (100vw - (var(--cover-size) * 3)) / 2 + (var(--cover-size) * 2)
+  );
 }
 
-.images_wrapper > img:first-of-type {
-  filter: blur(5px);
-  transform: scale(1.01);
+.cards > li > img {
+  will-change: transform, opacity;
+  width: 100%;
+  height: auto;
+  -webkit-box-reflect: below 0.5em
+    linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.25));
+}
+
+.cards > li > p {
+  /* border: 1px solid red; */
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  will-change: opacity;
+  /* width: 100vw; */
+  margin: 0;
+}
+
+.cards > li > p:first-of-type {
+  margin-top: 0.5rem;
+}
+
+.cards > li > p:last-of-type {
+  -webkit-box-reflect: below 0.2rem
+    linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.1));
 }
 
 /* ------- Tracks section -------- */
@@ -733,10 +573,20 @@ circle:hover {
   justify-content: space-between;
 }
 
-.recommendation_wrapper .header_container {
-  margin-top: 0;
+.header_container {
+  display: flex;
+  justify-content: center;
   padding-top: 6rem;
   position: static;
+}
+
+.header_content {
+  font-size: 1.5rem;
+  padding: 0.5rem 0.7rem;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 .vinyl_wrapper {
