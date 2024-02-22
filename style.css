@@ -224,9 +224,6 @@ p {
   width: 100vw;
   overflow: hidden;
 }
-.cards * {
-  border: 1px solid red;
-}
 
 .cards {
   box-sizing: border-box;
