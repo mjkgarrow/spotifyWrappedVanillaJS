@@ -208,9 +208,11 @@ function buildTopArtistsSection(data) {
     imageHTMLStrings.push(
       `
       <li>
-        <img src="${artist.images[0].url}" width="600" height="600" alt="" />
-        <p>#${index + 1}</p>
-        <p>${artist.name}</p>
+        <div>
+          <p>#${index + 1}</p>
+          <p>${artist.name}</p>
+          <img src="${artist.images[0].url}" width="600" height="600" alt="" />
+        </div>
       </li>
       `
     )
@@ -870,11 +872,13 @@ function buildTriggers(data) {
 
 function buildArtistSectionTriggers(dataLength) {
   let listElements = gsap.utils.toArray(".cards li")
-  let images = gsap.utils.toArray(".cards li img")
-  let textsElements = gsap.utils.toArray(".cards li p")
 
-  gsap.set(images, { rotateY: -45, scale: 0.8, opacity: 0 })
-  gsap.set(textsElements, { rotateY: -45, scale: 0.8, opacity: 0 })
+  // Initial set for all child images and paragraphs within list items
+  gsap.set(".cards div", {
+    rotateY: -45,
+    scale: 0.8,
+    opacity: 0,
+  })
 
   const TIMELINE = gsap.timeline({
     immediateRender: false,
@@ -889,46 +893,24 @@ function buildArtistSectionTriggers(dataLength) {
   })
 
   listElements.forEach((box, index) => {
-    let img = box.querySelector("img")
-    let text = box.querySelectorAll("p")
+    let coverWrapper = box.querySelector("div")
     let isLastElement = index === listElements.length - 1
 
     TIMELINE.to(
-      text,
+      coverWrapper,
       {
         scale: 1,
         opacity: 1,
         rotationY: 0,
         duration: 1,
       },
-      index < 0 ? 0 : `-=1`
-    )
-      .to(
-        img, // rotate and skew images
-        {
-          scale: 1,
-          opacity: 1,
-          rotationY: 0,
-          duration: 1,
-        },
-        index < 0 ? 0 : `-=1`
-      )
-      .to(img, {
-        scale: isLastElement ? 1 : 0.8,
-        opacity: isLastElement ? 1 : 0,
-        rotationY: isLastElement ? 0 : 45,
-        duration: isLastElement ? 0 : 1,
-      })
-      .to(
-        text,
-        {
-          scale: isLastElement ? 1 : 0.8,
-          opacity: isLastElement ? 1 : 0,
-          rotationY: isLastElement ? 0 : 45,
-          duration: isLastElement ? 0 : 1,
-        },
-        `-=1`
-      )
+      `-=1`
+    ).to(coverWrapper, {
+      scale: isLastElement ? 1 : 0.8,
+      opacity: isLastElement ? 1 : 0,
+      rotationY: isLastElement ? 0 : 45,
+      duration: isLastElement ? 0 : 1,
+    })
 
     TIMELINE.to(
       listElements, // shift the images over
@@ -936,13 +918,8 @@ function buildArtistSectionTriggers(dataLength) {
         x: `${-100 * (index + 1)}%`,
         duration: 1,
       },
-      index < 0 ? `-=1` : isLastElement ? `-=1` : `-=2`
+      isLastElement ? `-=1` : `-=2`
     )
-
-    // TIMELINE2.to(text, { opacity: 1, duration: 1, delay: 4 }).to(text, {
-    //   opacity: isLastElement ? 1 : 0,
-    //   duration: 1,
-    // })
   })
 }
 

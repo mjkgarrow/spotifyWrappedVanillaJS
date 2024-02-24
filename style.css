@@ -195,7 +195,7 @@ p {
 .artists_section {
   background-color: #e4c1f9;
   position: relative;
-  --cover-size: clamp(200px, 30vw, 30vh);
+  --cover-size: clamp(200px, min(40vw, 40vh), 50vw);
   display: grid;
   position: relative;
   height: max-content;
@@ -232,51 +232,50 @@ p {
   white-space: nowrap;
   width: 100vw;
   font-size: 0;
+  line-height: 1.6rem;
 }
 
-.cards > li {
+.cards div {
+  will-change: transform, opacity;
+  width: var(--cover-size);
+  height: var(--cover-size);
+}
+
+.cards li {
   perspective: 40vw;
   position: relative;
   z-index: 1;
   top: 50%;
   user-select: none;
   display: inline-block;
-  width: var(--cover-size);
-  height: var(--cover-size);
+  height: calc(var(--cover-size) + (1.6rem * 2) + 1rem);
+  margin-bottom: calc(var(--cover-size) / 3);
 }
 
-.cards > li:first-of-type {
+.cards li:first-of-type {
   margin-left: calc(
     (100vw - (var(--cover-size) * 3)) / 2 + (var(--cover-size) * 2)
   );
 }
 
-.cards > li > img {
-  will-change: transform, opacity;
+.cards img {
   width: 100%;
   height: auto;
-  -webkit-box-reflect: below 0.5em
-    linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.25));
+  -webkit-box-reflect: below 1rem
+    linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.2));
 }
 
-.cards > li > p {
+.cards p {
   text-align: center;
   margin-top: 1rem;
   font-size: 1.5rem;
   display: flex;
   justify-content: center;
-  opacity: 0;
-  will-change: opacity;
   margin: 0;
 }
 
-.cards > li > p:first-of-type {
-  margin-top: 0.5rem;
-}
-
-.cards > li > p:last-of-type {
-  -webkit-box-reflect: below 0.2rem
-    linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.1));
+.cards p:last-of-type {
+  margin-bottom: 1rem;
 }
 
 /* ------- Tracks section -------- */
@@ -305,7 +304,6 @@ p {
 .tracks_left_wrapper div {
   font-size: 1.5rem;
   padding: 0.5rem 0.7rem;
-  margin: 1rem;
   background-color: white;
   border-radius: 1rem;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -442,23 +440,22 @@ p {
   flex-direction: column;
   justify-content: center;
   background-color: #9f6fe2;
+  /* padding-top: 6rem; */
 }
 
 .chart_title {
-  margin-top: 30px;
-  font-size: 1.8rem;
-  padding: 1rem;
+  position: absolute;
+  top: 6rem;
+  font-size: 1.5rem;
+  padding: 0.5rem 0.7rem;
   background-color: white;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   border-radius: 1rem;
-  margin-bottom: 0.5rem;
 }
 
 .chart_content_wrapper {
   border-radius: 0.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   padding: 1rem;
   margin-bottom: 1rem;
   width: 75%;
@@ -504,6 +501,7 @@ svg {
   font-weight: 600;
   text-align: center;
   padding: 1rem;
+  padding-top: 6rem;
 }
 
 .chart_container_wrapper path {
@@ -689,6 +687,7 @@ circle:hover {
   button {
     font-size: 0.8rem;
     padding: 0.5em 0.8em;
+    color: black;
   }
 
   .logout_btn {
@@ -733,18 +732,23 @@ circle:hover {
   }
 
   .chart_title {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
   }
 
   .rec_wrapper:last-child {
     font-size: 1rem;
   }
 
-  .cards > li > p {
-    font-size: 1.3rem;
+  .cards li p {
+    font-size: 1.2rem;
+  }
+
+  .cards li {
+    margin-bottom: calc(var(--cover-size) / 3);
   }
 
   .artists_section_title {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    width: max-content;
   }
 }
