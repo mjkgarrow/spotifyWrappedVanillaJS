@@ -62,9 +62,6 @@ let currentTimePeriod = ""
 
 let chartDrawers = []
 
-/**
- * Initiates the Spotify login process.
- */
 function login() {
   // Define the required scopes for authorization
   const scopes = "user-top-read"
@@ -74,9 +71,6 @@ function login() {
   )}&response_type=token&show_dialog=false`
 }
 
-/**
- * Logs the user out by removing the access token from localStorage and redirecting to the homepage.
- */
 function logout() {
   // Remove the access token from localStorage
   localStorage.removeItem("access_token")
@@ -85,9 +79,6 @@ function logout() {
   window.location = homepageUri
 }
 
-/**
- * Handles the page load or redirect after user authorization.
- */
 async function handlePageLoadOrRedirect() {
   // Attempt to retrieve the stored access token from localStorage to see if the page
   if (getLocalStorageWithTimestamp("access_token")) {
@@ -124,9 +115,6 @@ async function handlePageLoadOrRedirect() {
   }
 }
 
-/**
- * Builds the site after successful authorization.
- */
 function buildSite(data) {
   chartDrawers = []
   document.querySelector("main").classList.remove("hidden")
@@ -199,7 +187,9 @@ function buildTopArtistsSection(data) {
 
   const artists = data.artists.slice(0, 5)
 
-  parentContainer.style.height = `${artists.length * 100}lvh`
+  parentContainer.style.height = `${artists.length * 100}${
+    window.innerWidth > window.innerHeight ? "vh" : "vw"
+  }`
 
   let imageHTMLStrings = []
 
@@ -667,7 +657,6 @@ function createChart(tracksData, searchProperty, colourIndex) {
 
     // X scales
     const x = d3.scaleLinear().domain([1, tracksData.length]).range([0, width])
-    // .nice()
 
     // Y scales
     const y = d3
@@ -783,15 +772,15 @@ function createChart(tracksData, searchProperty, colourIndex) {
   window.addEventListener("resize", function () {
     let newWidth = window.innerWidth
     clearTimeout(resizeTimeout)
-    if (Math.abs(newWidth - initialWidth) > 2) {
+    if (Math.abs(newWidth - initialWidth) > 1) {
       resizeTimeout = setTimeout(function () {
         let d = getLocalStorageWithTimestamp("spotifyData")[currentTimePeriod]
 
         ScrollTrigger.getAll().forEach((trigger) => trigger.kill(true))
 
-        buildTriggers(d)
-
         drawChart() // Redraw chart with new dimensions
+
+        buildTriggers(d)
       }, 10)
     }
   })
@@ -886,7 +875,7 @@ function buildArtistSectionTriggers(dataLength) {
     scrollTrigger: {
       trigger: ".artists_section",
       start: "top top",
-      end: `+=${dataLength * (100 - 100 / dataLength)}%`,
+      end: `bottom bottom`,
       scrub: true,
       fastScrollEnd: true,
     },
