@@ -249,7 +249,6 @@ p {
   user-select: none;
   display: inline-block;
   height: calc(var(--cover-size) + (1.6rem * 2) + 1rem);
-  margin-bottom: calc(var(--cover-size) / 3);
 }
 
 .cards li:first-of-type {
@@ -262,7 +261,7 @@ p {
   width: 100%;
   height: auto;
   -webkit-box-reflect: below 1rem
-    linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.2));
+    linear-gradient(rgb(0 0 0 / 0) 60%, rgb(0 0 0 / 0.2) 100%);
 }
 
 .cards p {
